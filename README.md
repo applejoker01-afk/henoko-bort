@@ -40,11 +40,15 @@
 
 ```
 .
+├── index.html                          # ウェブサイトのトップページ
 ├── README.md                           # このファイル
 ├── henoko-media-bias-report.md         # 完全版レポート（日本語）
-├── data/                               # データファイル（今後追加予定）
-│   ├── timeline.md                    # 事故の時系列
-│   └── media-coverage-comparison.md   # 報道量比較データ
+├── note-article.md                     # note用の短い問題提起記事
+├── LICENSE.md                          # ライセンス情報
+├── GITHUB_DESKTOP_GUIDE.md             # GitHub Desktop使用ガイド
+├── .gitignore                          # Git除外設定
+├── data/                               # データファイル
+│   └── timeline.md                    # 事故の時系列
 └── resources/                          # 参考資料
     └── references.md                  # 引用文献リスト
 ```
@@ -97,6 +101,32 @@
 2. **報道機関の記事**: 産経新聞、読売新聞、47NEWS、Wedge等
 3. **公的機関の発表**: 第11管区海上保安本部、文部科学省
 4. **専門家の分析**: 海事専門家、教育法学者のコメント
+
+## 🚀 GitHub Pagesでの公開手順
+
+### GitHub Desktopを使う場合（推奨）
+
+詳細な手順は **[GITHUB_DESKTOP_GUIDE.md](GITHUB_DESKTOP_GUIDE.md)** をご覧ください。
+
+**簡単な流れ**:
+1. GitHub Desktopでローカルリポジトリを作成
+2. すべてのファイルをコミット
+3. 「Publish repository」でGitHubに公開（Publicに設定）
+4. リポジトリのSettings > Pagesで公開設定
+5. `https://[ユーザー名].github.io/henoko-media-bias-report/` で公開完了！
+
+### コマンドラインを使う場合
+
+```bash
+git init
+git add .
+git commit -m "Initial commit: 辺野古事故と京都事件の報道比較レポート"
+git remote add origin https://github.com/[ユーザー名]/henoko-media-bias-report.git
+git branch -M main
+git push -u origin main
+```
+
+その後、リポジトリのSettings > Pagesで公開設定を行ってください。
 
 ## 📝 引用・転載について
 

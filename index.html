@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>思想・政治信条が報道を歪める現状 - 辺野古事故と京都事件の比較調査</title>
+    <meta name="description" content="2026年に発生した辺野古ボート転覆事故と京都小学生死体遺棄事件における報道の歪みを比較分析。思想・政治信条がいかにして真実を覆い隠すかを明らかにする調査レポート。">
+    <meta name="keywords" content="辺野古,ボート転覆事故,報道,メディアバイアス,京都事件,思想,政治信条,武石知華,同志社国際">
+    
+    <style>
+        :root {
+            --color-bg: #ffffff;
+            --color-text: #1a1a1a;
+            --color-text-muted: #6b6b6b;
+            --color-accent: #c41e3a;
+            --color-accent-light: #e8435f;
+            --color-border: #e0e0e0;
+            --color-highlight: #fff3cd;
+            --color-section-bg: #f8f9fa;
+            
+            --font-display: 'Noto Serif JP', serif;
+            --font-body: 'Noto Sans JP', sans-serif;
+            
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 4rem;
+            --spacing-xl: 6rem;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            letter-spacing: -0.02em;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        h2 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            margin-top: var(--spacing-lg);
+            border-left: 4px solid var(--color-accent);
+            padding-left: var(--spacing-sm);
+        }
+        
+        h3 {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            margin-top: var(--spacing-md);
+            color: var(--color-accent);
+        }
+        
+        p {
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        
+        a:hover {
+            border-bottom-color: var(--color-accent);
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--spacing-sm) 0;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-accent);
+        }
+        
+        .nav {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+        
+        .nav a {
+            font-size: 0.9rem;
+            border: none;
+            transition: color 0.3s ease;
+        }
+        
+        .nav a:hover {
+            color: var(--color-accent-light);
+        }
+        
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: var(--spacing-xl) var(--spacing-md);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            color: white;
+            margin-bottom: var(--spacing-md);
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--spacing-lg);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+        
+        .stat {
+            padding: var(--spacing-md);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-accent-light);
+            display: block;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+        
+        .section {
+            padding: var(--spacing-xl) 0;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .section:nth-child(even) {
+            background-color: var(--color-section-bg);
+        }
+        
+        /* Alert Box */
+        .alert {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border-radius: 4px;
+        }
+        
+        .alert-title {
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+            color: #856404;
+        }
+        
+        .alert-critical {
+            background: #f8d7da;
+            border-left-color: var(--color-accent);
+        }
+        
+        .alert-critical .alert-title {
+            color: var(--color-accent);
+        }
+        
+        /* Comparison Table */
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+        }
+        
+        .comparison-card {
+            background: white;
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            padding: var(--spacing-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .comparison-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .comparison-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-accent);
+        }
+        
+        .comparison-item {
+            margin-bottom: var(--spacing-sm);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .comparison-item:last-child {
+            border-bottom: none;
+        }
+        
+        .comparison-label {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            display: block;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--color-accent);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: var(--spacing-md);
+            padding-left: var(--spacing-md);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            border: 3px solid white;
+        }
+        
+        .timeline-date {
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        /* CTA Buttons */
+        .cta-group {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            margin: var(--spacing-md) 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            font-weight: 700;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: var(--color-accent);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--color-accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--color-accent);
+            border: 2px solid var(--color-accent);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--color-accent);
+            color: white;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: rgba(255, 255, 255, 0.8);
+            padding: var(--spacing-lg) var(--spacing-md);
+            text-align: center;
+        }
+        
+        .footer a {
+            color: white;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            .header, .nav, .cta-group, .footer {
+                display: none;
+            }
+        }
+    </style>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-content">
+            <div class="logo">報道検証レポート</div>
+            <nav class="nav">
+                <a href="#overview">概要</a>
+                <a href="#henoko">辺野古事故</a>
+                <a href="#kyoto">京都事件</a>
+                <a href="#comparison">比較分析</a>
+                <a href="#report">完全版</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>思想・政治信条が報道を歪めるとき</h1>
+            <p class="hero-subtitle">辺野古ボート転覆事故と京都小学生死体遺棄事件における<br>メディアバイアスの比較調査</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">2</span>
+                    <span class="stat-label">2026年に発生した悲劇</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">2</span>
+                    <span class="stat-label">異なる思想的バイアス</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">1</span>
+                    <span class="stat-label">共通の問題：歪められた真実</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section class="section" id="overview">
+        <div class="container">
+            <h2>なぜ同じような悲劇なのに、報道の扱いはこんなにも違うのか？</h2>
+            
+            <p>2026年3月、沖縄県辺野古沖で高校生が修学旅行中に亡くなりました。波浪注意報が出ている中、引率教員も同乗せず、無登録の船に37人の生徒を乗せた結果の悲劇でした。</p>
+            
+            <p>同じ頃、京都で小学生が犠牲になる凄惨な事件が起きました。こちらは連日トップニュース。一方、辺野古の事故は発生直後こそ報じられましたが、その後ほとんど続報がありません。</p>
+            
+            <div class="alert alert-critical">
+                <div class="alert-title">重要な問題提起</div>
+                <p>一見すると全く異なるこれら2つの事件には、重要な共通点が存在します。それは、<strong>「特定の思想や予断が情報の正確性を損ない、真相を歪めた」</strong>という点です。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Henoko Section -->
+    <section class="section" id="henoko">
+        <div class="container">
+            <h2>辺野古ボート転覆事故：「政治思想」が隠した真実</h2>
+            
+            <h3>事故の概要</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">2026年3月16日 午前7:30</div>
+                    <p>波浪注意報発令中にもかかわらず、出航を決定</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2026年3月16日 午前10:10</div>
+                    <p>小型船舶2隻が相次いで転覆。武石知華さん（17歳）と金井創船長（71歳）が死亡</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">事故直後</div>
+                    <p>大手メディアが「抗議活動のために乗船」と誤報</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">3月20日頃</div>
+                    <p>遺族がnoteで「サンゴ礁を見たかっただけ」と事実を公表</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">4月21日</div>
+                    <p>産経新聞が独自報道：救命胴衣の着用確認なし</p>
+                </div>
+            </div>
+            
+            <h3>武石知華さんの本当の姿</h3>
+            <p>知華さんは、インドネシアで8年間を過ごした帰国子女でした。ハーバード大学のサマースクールに合格し、哲学と天文学を学んだ聡明な17歳でした。将来はアメリカの大学に進学することを夢見ていました。</p>
+            
+            <div class="alert">
+                <div class="alert-title">遺族の証言より</div>
+                <p>彼女が望んだのは、<strong>政治的な争いの最前線を見ることではなく、ただ美しく広がる沖縄の海を友と分かち合うこと</strong>でした。</p>
+            </div>
+            
+            <h3>重大な安全管理の欠陥</h3>
+            <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li style="margin-bottom: 0.5rem;">❌ 無登録での運航（海上運送法違反の疑い）</li>
+                <li style="margin-bottom: 0.5rem;">❌ 波浪注意報下での強行出航</li>
+                <li style="margin-bottom: 0.5rem;">❌ 引率教員ゼロ（全員陸上待機）</li>
+                <li style="margin-bottom: 0.5rem;">❌ 救命胴衣の着用確認なし</li>
+                <li style="margin-bottom: 0.5rem;">❌ 遺族への謝罪なし（事故から1ヶ月以上）</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Kyoto Section -->
+    <section class="section" id="kyoto">
+        <div class="container">
+            <h2>京都小学生死体遺棄事件：「排外主義」が生んだデマ</h2>
+            
+            <p>京都の事件では、SNS上で「容疑者は外国人だ」というデマが拡散されました。実際は日本国籍の容疑者でしたが、「悪いのは外国人であってほしい」という差別意識がデマを加速させたのです。</p>
+            
+            <h3>デマの拡散メカニズム</h3>
+            <p>台湾のテレビ局（FTV）までもがこのデマを<strong>裏取りせずに報じ</strong>、後に謝罪する事態に発展しました。これは、SNSのデマが既存メディアを「汚染」し、国際的な誤情報の拡散につながった典型例です。</p>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="section" id="comparison">
+        <div class="container">
+            <h2>2つの事件の比較分析</h2>
+            
+            <div class="comparison">
+                <div class="comparison-card">
+                    <div class="comparison-title">京都小学生死体遺棄事件</div>
+                    
+                    <div class="comparison-item">
+                        <span class="comparison-label">歪みの方向性</span>
+                        排外主義・外国人差別に基づく歪み
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <span class="comparison-label">デマの起点</span>
+                        主にSNS（匿名ユーザー）
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <span class="comparison-label">歪められた対象</span>
+                        容疑者の属性（国籍・勤務先）
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <span class="comparison-label">訂正の経緯</span>
+                        警察の発表とファクトチェックによる
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <span class="comparison-label">報道量</span>
+                        連日トップニュースで大量報道
+                    </div>
+                </div>
+                
+                <div class="comparison-card">
+                    <div class="comparison-title">辺野古ボート転覆事故</div>
+                    
+                    <div class="comparison-item">
+                        <span class="comparison-label">歪みの方向性</span>
+                        政治活動（基地反対運動）への配慮・レッテル貼り
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <span class="comparison-label">デマの起点</span>
+                        <strong>大手メディア（朝日新聞等）および運航団体</strong>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <span class="comparison-label">歪められた対象</span>
+                        被害生徒の目的と事故の安全管理責任
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <span class="comparison-label">訂正の経緯</span>
+                        <strong>遺族によるnoteでの命がけの発信による</strong>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <span class="comparison-label">報道量</span>
+                        発生直後のみ、その後は「報道しない自由」
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-critical" style="margin-top: 3rem;">
+                <div class="alert-title">最も深刻な違い</div>
+                <p>京都の事件では「<strong>大衆の差別思想</strong>」が報道を歪めました。</p>
+                <p>辺野古の事故では「<strong>メディアの政治思想</strong>」が真実を隠しました。</p>
+                <p>どちらも、被害者とその家族に二次的な苦痛を与えています。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hidden Issues Section -->
+    <section class="section">
+        <div class="container">
+            <h2>修学旅行が「政治活動の資金源」に？</h2>
+            
+            <p>調査で明らかになった驚くべき事実：</p>
+            
+            <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li style="margin-bottom: 1rem;"><strong>年間約2,000校</strong>の修学旅行生が沖縄へ</li>
+                <li style="margin-bottom: 1rem;">反基地活動団体の船や施設を利用</li>
+                <li style="margin-bottom: 1rem;">「ボランティア」と称しながら金銭授受</li>
+                <li style="margin-bottom: 1rem;"><strong>無登録での実質的な営業行為</strong></li>
+            </ul>
+            
+            <p style="margin-top: 2rem;">「辺野古基金」から運航団体への<strong>1,000万円単位の支援金</strong>も確認されています。教育と政治活動の境界線は、どこにあるのでしょうか？</p>
+        </div>
+    </section>
+
+    <!-- Report Section -->
+    <section class="section" id="report" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+        <div class="container" style="text-align: center;">
+            <h2>完全版調査レポート</h2>
+            <p style="max-width: 800px; margin: 2rem auto;">この問題の全体像を把握するため、詳細な調査レポートをGitHubで公開しています。事故の詳細な時系列、京都事件との報道比較データ、修学旅行利権の構造分析、遺族の証言、法的問題点の整理など、20以上の引用文献を含む包括的な内容です。</p>
+            
+            <div class="cta-group" style="justify-content: center; margin-top: 3rem;">
+                <a href="henoko-media-bias-report.md" class="btn btn-primary">完全版レポートを読む</a>
+                <a href="https://github.com/" class="btn btn-secondary">GitHubで見る</a>
+            </div>
+            
+            <p style="margin-top: 2rem; font-size: 0.9rem; color: var(--color-text-muted);">
+                レポートには以下が含まれます：<br>
+                事故の詳細分析 | 時系列データ | 報道比較 | 引用文献20+ | 法的問題点 | 提言
+            </p>
+        </div>
+    </section>
+
+    <!-- Questions Section -->
+    <section class="section">
+        <div class="container">
+            <h2>私たちが問うべきこと</h2>
+            
+            <h3>メディアに対して</h3>
+            <p>「この事故の本質は何か？ なぜ知床遊覧船事故と同じように追及しないのか？」</p>
+            
+            <h3>教育機関に対して</h3>
+            <p>「生徒の安全より、政治的配慮を優先したのか？」</p>
+            
+            <h3>社会に対して</h3>
+            <p>「思想や信条が、真実を見えなくしていないか？」</p>
+            
+            <div class="alert" style="margin-top: 3rem;">
+                <div class="alert-title">本レポートの目的</div>
+                <p>私たちは、思想や政治信条が報道を歪める現状を直視し、真実に基づいた情報発信と、被害者の尊厳を最優先する社会を目指さなければなりません。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p style="margin-bottom: 1rem;">武石知華さんのご冥福を心よりお祈りいたします。</p>
+            <p style="font-size: 0.9rem;">
+                <a href="https://note.com/beloved_tomoka/">辺野古ボート転覆事故遺族メモ</a> |
+                <a href="henoko-media-bias-report.md">完全版レポート</a> |
+                <a href="LICENSE.md">ライセンス (CC BY 4.0)</a>
+            </p>
+            <p style="margin-top: 2rem; font-size: 0.8rem; color: rgba(255, 255, 255, 0.6);">
+                最終更新: 2026年4月22日
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Header hide on scroll down, show on scroll up
+        let lastScroll = 0;
+        const header = document.getElementById('header');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll <= 0) {
+                header.style.transform = 'translateY(0)';
+                return;
+            }
+            
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                header.style.transform = 'translateY(-100%)';
+            } else {
+                header.style.transform = 'translateY(0)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Fade in elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

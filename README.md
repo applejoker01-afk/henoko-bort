@@ -128,6 +128,42 @@ git push -u origin main
 
 その後、リポジトリのSettings > Pagesで公開設定を行ってください。
 
+## 🔄 継続的な情報更新システム
+
+### 自動化された毎日の更新
+
+このリポジトリには、**GitHub Actions**による自動更新システムが組み込まれています：
+
+- **毎日午前9時（日本時間）** に自動的に更新テンプレートを生成
+- 更新リマインダーのIssueを自動作成
+- 情報源のチェックリストを提供
+
+### 更新への参加方法
+
+詳しくは **[CONTRIBUTING.md](CONTRIBUTING.md)** をご覧ください。
+
+**3つの参加方法**:
+1. **情報提供**: [Issueで新しい情報を報告](../../issues/new?template=new-information.md)
+2. **誤報報告**: [デマや誤報を指摘](../../issues/new?template=misinformation-report.md)
+3. **直接編集**: Pull Requestで日次更新ファイルを編集
+
+### 日次更新の構造
+
+```
+updates/
+├── README.md                    # 更新履歴の索引
+├── SOURCES.md                   # 情報源チェックリスト
+├── WEEKLY_SUMMARY_TEMPLATE.md   # 週次サマリーテンプレート
+└── 2026-04/
+    └── 2026-04-22.md           # 日次更新ファイル
+```
+
+### 更新を確認する
+
+- **最新の更新**: [updates/README.md](updates/README.md)
+- **今日の更新**: 毎日自動生成される `updates/YYYY-MM/YYYY-MM-DD.md`
+- **週次まとめ**: 毎週日曜日に作成される週次サマリー
+
 ## 📝 引用・転載について
 
 本レポートは、事実の正確な伝達と社会的議論の促進を目的として作成されています。

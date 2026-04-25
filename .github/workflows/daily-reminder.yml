@@ -2,9 +2,12 @@ name: 毎日の情報更新リマインダー
 
 on:
   schedule:
-    # 毎日日本時間 9:00 AM (UTC 0:00) に実行
     - cron: '0 0 * * *'
-  workflow_dispatch: # 手動実行も可能
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
 
 jobs:
   daily-reminder:
@@ -144,13 +147,13 @@ jobs:
           **更新日時:** DATE_PLACEHOLDER
           TEMPLATE_END
           
-          # 日付のプレースホルダーを実際の日付で置換
           sed -i "s/DATE_PLACEHOLDER/$JAPANESE_DATE/g" "$MONTH_DIR/${{ steps.date.outputs.today }}.md"
           
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add "$MONTH_DIR/${{ steps.date.outputs.today }}.md"
           git commit -m "🤖 自動作成: $JAPANESE_DATE の更新テンプレート"
+          git pull --rebase origin main
           git push
       
       - name: Issue作成（更新リマインダー）

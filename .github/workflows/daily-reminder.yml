@@ -37,10 +37,11 @@ jobs:
         if: steps.check.outputs.exists == 'false'
         run: |
           MONTH_DIR="updates/${{ steps.date.outputs.month }}"
+          JAPANESE_DATE="${{ steps.date.outputs.japanese_date }}"
           mkdir -p "$MONTH_DIR"
           
-          cat > "$MONTH_DIR/${{ steps.date.outputs.today }}.md" << 'EOF'
-          # ${{ steps.date.outputs.japanese_date }} の更新情報
+          cat > "$MONTH_DIR/${{ steps.date.outputs.today }}.md" <<'TEMPLATE_END'
+          # DATE_PLACEHOLDER の更新情報
           
           ## 📰 報道・メディア情報
           
@@ -140,13 +141,16 @@ jobs:
           ---
           
           **更新者:** 
-          **更新日時:** ${{ steps.date.outputs.japanese_date }}
-          EOF
+          **更新日時:** DATE_PLACEHOLDER
+          TEMPLATE_END
+          
+          # 日付のプレースホルダーを実際の日付で置換
+          sed -i "s/DATE_PLACEHOLDER/$JAPANESE_DATE/g" "$MONTH_DIR/${{ steps.date.outputs.today }}.md"
           
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add "$MONTH_DIR/${{ steps.date.outputs.today }}.md"
-          git commit -m "🤖 自動作成: ${{ steps.date.outputs.japanese_date }} の更新テンプレート"
+          git commit -m "🤖 自動作成: $JAPANESE_DATE の更新テンプレート"
           git push
       
       - name: Issue作成（更新リマインダー）

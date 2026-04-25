@@ -184,7 +184,7 @@ updates/
 
 ## 📞 連絡先
 
-- **作成者**: としひで
+- **作成者**: ナナ
 - **note**: [辺野古ボート転覆事故関連記事](https://note.com/)
 - **問い合わせ**: GitHubのIssueまたはDiscussionsをご利用ください
 

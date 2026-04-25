@@ -150,8 +150,11 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add "$MONTH_DIR/${{ steps.date.outputs.today }}.md"
-          git commit -m "🤖 自動作成: $JAPANESE_DATE の更新テンプレート"
-          git push
+git commit -m "🤖 自動作成: $JAPANESE_DATE の更新テンプレート"
+
+# リモートの変更を取り込んでからプッシュ
+git pull --rebase origin main
+git push
       
       - name: Issue作成（更新リマインダー）
         if: steps.check.outputs.exists == 'false'

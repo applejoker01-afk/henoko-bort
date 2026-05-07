@@ -12,27 +12,26 @@ permissions:
 jobs:
   daily-reminder:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: 最新の変更を取得
-        run: git pull --rebase origin main
-
-      - name: 今日の日付を取得 (JST)
+        with:
+          fetch-depth: 0
+      
+      - name: リモートの最新状態を取得
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull origin main
+      
+      - name: 今日の日付を取得
         id: date
         run: |
-          TODAY=$(TZ=Asia/Tokyo date +'%Y-%m-%d')
-          MONTH=$(TZ=Asia/Tokyo date +'%Y-%m')
-          JAPANESE_DATE=$(TZ=Asia/Tokyo date +'%Y年%m月%d日')
-          ACCIDENT_DATE="2026-03-16"
-          DAYS=$(( ($(date -d "$TODAY" +%s) - $(date -d "$ACCIDENT_DATE" +%s)) / 86400 ))
-          echo "today=$TODAY" >> $GITHUB_OUTPUT
-          echo "month=$MONTH" >> $GITHUB_OUTPUT
-          echo "japanese_date=$JAPANESE_DATE" >> $GITHUB_OUTPUT
-          echo "days_since=$DAYS" >> $GITHUB_OUTPUT
-
+          echo "today=$(TZ=Asia/Tokyo date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+          echo "month=$(TZ=Asia/Tokyo date +'%Y-%m')" >> $GITHUB_OUTPUT
+          echo "japanese_date=$(TZ=Asia/Tokyo date +'%Y年%m月%d日')" >> $GITHUB_OUTPUT
+      
       - name: 今日の更新ファイルが存在するかチェック
         id: check
         run: |
@@ -44,131 +43,170 @@ jobs:
             echo "exists=false" >> $GITHUB_OUTPUT
             echo "❌ 今日の更新ファイルがまだありません: $FILE"
           fi
-
+      
       - name: 更新ファイルのテンプレートを作成
         if: steps.check.outputs.exists == 'false'
-        env:
-          JAPANESE_DATE: ${{ steps.date.outputs.japanese_date }}
-          TODAY: ${{ steps.date.outputs.today }}
-          MONTH: ${{ steps.date.outputs.month }}
-          DAYS: ${{ steps.date.outputs.days_since }}
         run: |
-          FILE="updates/${MONTH}/${TODAY}.md"
-          mkdir -p "updates/${MONTH}"
-
-          cat > "$FILE" << TEMPLATE_END
-          # ${JAPANESE_DATE} の更新情報
-          **事故から${DAYS}日目**
-
+          MONTH_DIR="updates/${{ steps.date.outputs.month }}"
+          JAPANESE_DATE="${{ steps.date.outputs.japanese_date }}"
+          mkdir -p "$MONTH_DIR"
+          
+          cat > "$MONTH_DIR/${{ steps.date.outputs.today }}.md" <<'TEMPLATE_END'
+          # DATE_PLACEHOLDER の更新情報
+          
           ## 📰 報道・メディア情報
-
-          新規主要報道なし。
-
+          
+          ### 新聞・ニュースサイト
+          - [ ] 産経新聞
+          - [ ] 読売新聞
+          - [ ] 朝日新聞
+          - [ ] 毎日新聞
+          - [ ] 沖縄タイムス
+          - [ ] 琉球新報
+          - [ ] 47NEWS
+          
+          **更新内容:**
+          （ここに報道内容を記載）
+          
           ---
-
+          
           ## 🏛️ 公的機関の発表
-
-          - ✅ 第11管区海上保安本部: 捜査継続中
-
+          
+          ### 捜査機関
+          - [ ] 第11管区海上保安本部
+          - [ ] 沖縄県警
+          
+          ### 行政機関
+          - [ ] 文部科学省
+          - [ ] 沖縄県
+          - [ ] 名護市
+          
+          **更新内容:**
+          （ここに公的発表を記載）
+          
           ---
-
+          
           ## 🏫 関係機関の動き
-
-          - 第三者委員会: 調査継続中
-          - **ヘリ基地反対協議会: 遺族への直接謝罪なし（${DAYS}日経過）**
-
+          
+          ### 教育機関
+          - [ ] 同志社国際高等学校
+          - [ ] 第三者委員会
+          
+          ### 運航団体
+          - [ ] ヘリ基地反対協議会
+          - [ ] 辺野古基金
+          
+          **更新内容:**
+          （ここに関係機関の動きを記載）
+          
           ---
-
+          
+          ## 💭 遺族の発信
+          
+          - [ ] note「辺野古ボート転覆事故遺族メモ」の更新確認
+          
+          **更新内容:**
+          （ここに遺族の発信内容を記載）
+          
+          ---
+          
+          ## 🗣️ SNS・世論の動向
+          
+          - [ ] Twitter/X のトレンド確認
+          - [ ] BPOへの苦情状況
+          - [ ] 主要な議論のまとめ
+          
+          **更新内容:**
+          （ここにSNSでの主要な議論を記載）
+          
+          ---
+          
           ## 📊 統計・データ
-
-          - **事故からの経過日数:** ${DAYS}日
-
+          
+          - 事故からの経過日数: （自動計算: 2026年3月16日から）
+          - 報道記事数（推定）: 
+          - BPO苦情件数（累計）: 
+          
           ---
-
+          
+          ## 🔗 参考リンク
+          
+          1. 
+          2. 
+          3. 
+          
+          ---
+          
           ## 📝 今日のまとめ
-
+          
           （今日の主要な動きを3-5行で要約）
-
+          
           ---
-
-          **更新者:**
-          **更新日時:** ${JAPANESE_DATE}
+          
+          ## ⚠️ 要注意事項
+          
+          - [ ] 誤報・デマの確認
+          - [ ] 情報源の信頼性チェック
+          - [ ] 遺族のプライバシー配慮
+          
+          ---
+          
+          **更新者:** 
+          **更新日時:** DATE_PLACEHOLDER
           TEMPLATE_END
-
-          sed -i 's/^          //' "$FILE"
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add "$FILE"
-          git commit -m "🤖 自動作成: ${JAPANESE_DATE} の更新テンプレート（${DAYS}日目）"
+          
+          sed -i "s/DATE_PLACEHOLDER/$JAPANESE_DATE/g" "$MONTH_DIR/${{ steps.date.outputs.today }}.md"
+          
+          git add "$MONTH_DIR/${{ steps.date.outputs.today }}.md"
+          git commit -m "🤖 自動作成: $JAPANESE_DATE の更新テンプレート"
           git push
-
+      
       - name: Issue作成（更新リマインダー）
         if: steps.check.outputs.exists == 'false'
         uses: actions/github-script@v7
         with:
           script: |
             const today = '${{ steps.date.outputs.japanese_date }}';
-            const days = '${{ steps.date.outputs.days_since }}';
             const file = 'updates/${{ steps.date.outputs.month }}/${{ steps.date.outputs.today }}.md';
-
-            // ラベルが存在しない場合は作成する
-            for (const [name, color] of [['daily-update', '0075ca'], ['reminder', 'e4e669']]) {
-              try {
-                await github.rest.issues.getLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  name,
-                });
-              } catch {
-                await github.rest.issues.createLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  name,
-                  color,
-                });
-              }
-            }
-
-            await github.rest.issues.create({
+            
+            github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `📅 ${today} の情報更新リマインダー（${days}日目）`,
-              body: [
-                `## ${today} の情報更新（事故から${days}日目）`,
-                '',
-                '今日の更新テンプレートが自動作成されました。',
-                '',
-                '### 📄 更新ファイル',
-                `\`${file}\``,
-                '',
-                '### ✅ 確認すべき情報源',
-                '',
-                '#### 報道機関',
-                '- [ ] [産経新聞](https://www.sankei.com/)',
-                '- [ ] [読売新聞](https://www.yomiuri.co.jp/)',
-                '- [ ] [沖縄タイムス](https://www.okinawatimes.co.jp/)',
-                '- [ ] [琉球新報](https://ryukyushimpo.jp/)',
-                '',
-                '#### 公的機関',
-                '- [ ] [第11管区海上保安本部](https://www.kaiho.mlit.go.jp/11kanku/)',
-                '- [ ] [文部科学省](https://www.mext.go.jp/)',
-                '',
-                '#### 遺族の発信',
-                '- [ ] [辺野古ボート転覆事故遺族メモ (note)](https://note.com/beloved_tomoka/)',
-                '',
-                '### 📝 作業手順',
-                '',
-                '1. 上記の情報源を確認',
-                `2. \`${file}\` を編集して更新情報を記載`,
-                '3. 変更をコミット・プッシュ',
-                '4. このIssueをクローズ',
-                '',
-                '### 🔔 重要',
-                '',
-                '- 誤報やデマに注意',
-                '- 遺族のプライバシーを最優先',
-                '- 情報源を必ず明記',
-              ].join('\n'),
-              labels: ['daily-update', 'reminder'],
+              title: `📅 ${today} の情報更新リマインダー`,
+              body: `## ${today} の情報更新
+              
+              今日の更新テンプレートが作成されました。
+              
+              ### 📄 更新ファイル
+              \`${file}\`
+              
+              ### ✅ 確認すべき情報源
+              
+              #### 報道機関
+              - [ ] [産経新聞](https://www.sankei.com/)
+              - [ ] [読売新聞](https://www.yomiuri.co.jp/)
+              - [ ] [沖縄タイムス](https://www.okinawatimes.co.jp/)
+              - [ ] [琉球新報](https://ryukyushimpo.jp/)
+              
+              #### 公的機関
+              - [ ] [第11管区海上保安本部](https://www.kaiho.mlit.go.jp/11kanku/)
+              - [ ] [文部科学省](https://www.mext.go.jp/)
+              
+              #### 遺族の発信
+              - [ ] [辺野古ボート転覆事故遺族メモ (note)](https://note.com/beloved_tomoka/)
+              
+              ### 📝 作業手順
+              
+              1. 上記の情報源を確認
+              2. \`${file}\` を編集して更新情報を記載
+              3. 変更をコミット・プッシュ
+              4. このIssueをクローズ
+              
+              ### 🔔 重要
+              
+              - 誤報やデマに注意
+              - 遺族のプライバシーを最優先
+              - 情報源を必ず明記
+              `,
+              labels: ['daily-update', 'reminder']
             });

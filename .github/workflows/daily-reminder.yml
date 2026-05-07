@@ -19,11 +19,11 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: リモートの最新状態を取得
+      - name: Git設定とリモート最新状態の取得
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git pull origin main
+          git fetch origin main
       
       - name: 今日の日付を取得
         id: date
@@ -32,16 +32,18 @@ jobs:
           echo "month=$(TZ=Asia/Tokyo date +'%Y-%m')" >> $GITHUB_OUTPUT
           echo "japanese_date=$(TZ=Asia/Tokyo date +'%Y年%m月%d日')" >> $GITHUB_OUTPUT
       
-      - name: 今日の更新ファイルが存在するかチェック
+      - name: リモートに今日の更新ファイルが存在するかチェック
         id: check
         run: |
           FILE="updates/${{ steps.date.outputs.month }}/${{ steps.date.outputs.today }}.md"
-          if [ -f "$FILE" ]; then
+          
+          # リモートブランチにファイルが存在するかチェック
+          if git ls-tree -r origin/main --name-only | grep -q "^$FILE$"; then
             echo "exists=true" >> $GITHUB_OUTPUT
-            echo "✅ 今日の更新ファイルは既に存在します: $FILE"
+            echo "✅ リモートに今日の更新ファイルが既に存在します: $FILE"
           else
             echo "exists=false" >> $GITHUB_OUTPUT
-            echo "❌ 今日の更新ファイルがまだありません: $FILE"
+            echo "❌ リモートに今日の更新ファイルがまだありません: $FILE"
           fi
       
       - name: 更新ファイルのテンプレートを作成
@@ -159,7 +161,10 @@ jobs:
           
           git add "$MONTH_DIR/${{ steps.date.outputs.today }}.md"
           git commit -m "🤖 自動作成: $JAPANESE_DATE の更新テンプレート"
-          git push
+          
+          # リモートの変更を取り込んでからプッシュ（コンフリクトを避けるため）
+          git pull --no-rebase origin main || echo "Pull failed, will try force push"
+          git push origin main
       
       - name: Issue作成（更新リマインダー）
         if: steps.check.outputs.exists == 'false'

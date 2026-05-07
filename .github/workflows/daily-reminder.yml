@@ -31,13 +31,13 @@ jobs:
           echo "today=$(TZ=Asia/Tokyo date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
           echo "month=$(TZ=Asia/Tokyo date +'%Y-%m')" >> $GITHUB_OUTPUT
           echo "japanese_date=$(TZ=Asia/Tokyo date +'%Y年%m月%d日')" >> $GITHUB_OUTPUT
+          echo "days_since=$(( ( $(date +%s) - $(date -d '2026-03-16' +%s) ) / 86400 ))" >> $GITHUB_OUTPUT
       
       - name: リモートに今日の更新ファイルが存在するかチェック
         id: check
         run: |
           FILE="updates/${{ steps.date.outputs.month }}/${{ steps.date.outputs.today }}.md"
           
-          # リモートブランチにファイルが存在するかチェック
           if git ls-tree -r origin/main --name-only | grep -q "^$FILE$"; then
             echo "exists=true" >> $GITHUB_OUTPUT
             echo "✅ リモートに今日の更新ファイルが既に存在します: $FILE"
@@ -62,10 +62,8 @@ jobs:
           - [ ] 産経新聞
           - [ ] 読売新聞
           - [ ] 朝日新聞
-          - [ ] 毎日新聞
           - [ ] 沖縄タイムス
           - [ ] 琉球新報
-          - [ ] 47NEWS
           
           **更新内容:**
           （ここに報道内容を記載）
@@ -74,68 +72,8 @@ jobs:
           
           ## 🏛️ 公的機関の発表
           
-          ### 捜査機関
-          - [ ] 第11管区海上保安本部
-          - [ ] 沖縄県警
-          
-          ### 行政機関
-          - [ ] 文部科学省
-          - [ ] 沖縄県
-          - [ ] 名護市
-          
           **更新内容:**
           （ここに公的発表を記載）
-          
-          ---
-          
-          ## 🏫 関係機関の動き
-          
-          ### 教育機関
-          - [ ] 同志社国際高等学校
-          - [ ] 第三者委員会
-          
-          ### 運航団体
-          - [ ] ヘリ基地反対協議会
-          - [ ] 辺野古基金
-          
-          **更新内容:**
-          （ここに関係機関の動きを記載）
-          
-          ---
-          
-          ## 💭 遺族の発信
-          
-          - [ ] note「辺野古ボート転覆事故遺族メモ」の更新確認
-          
-          **更新内容:**
-          （ここに遺族の発信内容を記載）
-          
-          ---
-          
-          ## 🗣️ SNS・世論の動向
-          
-          - [ ] Twitter/X のトレンド確認
-          - [ ] BPOへの苦情状況
-          - [ ] 主要な議論のまとめ
-          
-          **更新内容:**
-          （ここにSNSでの主要な議論を記載）
-          
-          ---
-          
-          ## 📊 統計・データ
-          
-          - 事故からの経過日数: （自動計算: 2026年3月16日から）
-          - 報道記事数（推定）: 
-          - BPO苦情件数（累計）: 
-          
-          ---
-          
-          ## 🔗 参考リンク
-          
-          1. 
-          2. 
-          3. 
           
           ---
           
@@ -145,25 +83,79 @@ jobs:
           
           ---
           
-          ## ⚠️ 要注意事項
-          
-          - [ ] 誤報・デマの確認
-          - [ ] 情報源の信頼性チェック
-          - [ ] 遺族のプライバシー配慮
-          
-          ---
-          
-          **更新者:** 
-          **更新日時:** DATE_PLACEHOLDER
+          **更新者:** としひで  
+          **更新日時:** DATE_PLACEHOLDER  
+          **事故からの経過:** DAYS_SINCE日
           TEMPLATE_END
           
           sed -i "s/DATE_PLACEHOLDER/$JAPANESE_DATE/g" "$MONTH_DIR/${{ steps.date.outputs.today }}.md"
+          sed -i "s/DAYS_SINCE/${{ steps.date.outputs.days_since }}/g" "$MONTH_DIR/${{ steps.date.outputs.today }}.md"
           
           git add "$MONTH_DIR/${{ steps.date.outputs.today }}.md"
           git commit -m "🤖 自動作成: $JAPANESE_DATE の更新テンプレート"
+          git push origin main
+      
+      - name: note用要約記事のテンプレートを作成
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          MONTH_DIR="updates/${{ steps.date.outputs.month }}"
+          JAPANESE_DATE="${{ steps.date.outputs.japanese_date }}"
+          DAYS_SINCE="${{ steps.date.outputs.days_since }}"
           
-          # リモートの変更を取り込んでからプッシュ（コンフリクトを避けるため）
-          git pull --no-rebase origin main || echo "Pull failed, will try force push"
+          cat > "$MONTH_DIR/${{ steps.date.outputs.today }}-note.md" <<'NOTE_TEMPLATE_END'
+          # 辺野古ボート転覆事故 | DATE_PLACEHOLDER の動き
+          
+          事故からDAYS_SINCE日が経過しました。
+          
+          ---
+          
+          ## 📌 今日の主な動き
+          
+          ### 報道
+          
+          （ここに今日の主要な報道を1-2行で記載）
+          
+          ### 捜査・行政
+          
+          （ここに捜査や行政の動きを1-2行で記載）
+          
+          ---
+          
+          ## 💭 遺族として思うこと
+          
+          （ここに、その日の出来事に対する遺族の視点からのコメントを記載）
+          
+          ---
+          
+          ## 🔗 詳細情報
+          
+          詳しい情報は、[報道検証サイト](https://applejoker01-afk.github.io/henoko-bort/)をご覧ください。
+          
+          ---
+          
+          ## 📱 SNS共有用（140文字以内）
+          
+          ```
+          【辺野古事故・DAYS_SINCE日目】
+          （ここに今日の最も重要なポイントを140文字以内で記載）
+          #辺野古ボート転覆事故
+          ```
+          
+          ---
+          
+          **知華が亡くなってからDAYS_SINCE日。**  
+          **今日も、真実を求めて。**
+          
+          ---
+          
+          <small>辺野古ボート転覆事故の真相究明と再発防止を願う遺族による情報発信です。</small>
+          NOTE_TEMPLATE_END
+          
+          sed -i "s/DATE_PLACEHOLDER/$JAPANESE_DATE/g" "$MONTH_DIR/${{ steps.date.outputs.today }}-note.md"
+          sed -i "s/DAYS_SINCE/$DAYS_SINCE/g" "$MONTH_DIR/${{ steps.date.outputs.today }}-note.md"
+          
+          git add "$MONTH_DIR/${{ steps.date.outputs.today }}-note.md"
+          git commit -m "📝 note用要約作成: $JAPANESE_DATE"
           git push origin main
       
       - name: Issue作成（更新リマインダー）
@@ -173,45 +165,31 @@ jobs:
           script: |
             const today = '${{ steps.date.outputs.japanese_date }}';
             const file = 'updates/${{ steps.date.outputs.month }}/${{ steps.date.outputs.today }}.md';
+            const noteFile = 'updates/${{ steps.date.outputs.month }}/${{ steps.date.outputs.today }}-note.md';
+            const daysSince = '${{ steps.date.outputs.days_since }}';
             
             github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `📅 ${today} の情報更新リマインダー`,
+              title: `📅 ${today} の情報更新（事故から${daysSince}日目）`,
               body: `## ${today} の情報更新
               
-              今日の更新テンプレートが作成されました。
+              ### 📄 作成されたファイル
               
-              ### 📄 更新ファイル
-              \`${file}\`
-              
-              ### ✅ 確認すべき情報源
-              
-              #### 報道機関
-              - [ ] [産経新聞](https://www.sankei.com/)
-              - [ ] [読売新聞](https://www.yomiuri.co.jp/)
-              - [ ] [沖縄タイムス](https://www.okinawatimes.co.jp/)
-              - [ ] [琉球新報](https://ryukyushimpo.jp/)
-              
-              #### 公的機関
-              - [ ] [第11管区海上保安本部](https://www.kaiho.mlit.go.jp/11kanku/)
-              - [ ] [文部科学省](https://www.mext.go.jp/)
-              
-              #### 遺族の発信
-              - [ ] [辺野古ボート転覆事故遺族メモ (note)](https://note.com/beloved_tomoka/)
+              1. **日次更新**: \`${file}\`
+              2. **note用要約**: \`${noteFile}\`
               
               ### 📝 作業手順
               
-              1. 上記の情報源を確認
-              2. \`${file}\` を編集して更新情報を記載
-              3. 変更をコミット・プッシュ
-              4. このIssueをクローズ
+              1. 情報源を確認
+              2. \`${file}\` に詳細を記載
+              3. \`${noteFile}\` にnote用要約を記載
+              4. note.comに投稿
+              5. このIssueをクローズ
               
-              ### 🔔 重要
+              ---
               
-              - 誤報やデマに注意
-              - 遺族のプライバシーを最優先
-              - 情報源を必ず明記
+              **事故から${daysSince}日が経過しました。**
               `,
               labels: ['daily-update', 'reminder']
             });

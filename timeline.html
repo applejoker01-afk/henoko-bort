@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時系列詳細・メディア比較分析 | 辺野古ボート転覆事故</title>
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;700;800&family=BIZ+UDGothic:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .tab-bar{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:2rem;overflow-x:auto}
+        .tab-btn{background:none;border:none;color:#9e9a90;font-family:'BIZ UDGothic',sans-serif;font-size:.85rem;padding:.8rem 1.5rem;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .25s}
+        .tab-btn:hover{color:#e8e6e1}
+        .tab-btn.active{color:#c49a3c;border-bottom-color:#c49a3c}
+        .tab-content{display:none}
+        .tab-content.active{display:block}
+        .media-compare{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0}
+        .compare-col{background:#12121a;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:1.75rem;position:relative;overflow:hidden}
+        .compare-col::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+        .compare-col.good::before{background:linear-gradient(90deg,#4caf50,#81c784)}
+        .compare-col.bad::before{background:linear-gradient(90deg,#c44536,#ef5350)}
+        .compare-col.neutral::before{background:linear-gradient(90deg,#c49a3c,#ffd54f)}
+        .compare-col h4{font-family:'Shippori Mincho',serif;font-size:1.1rem;margin-bottom:1rem}
+        .issue-card{background:#1a1a28;border:1px solid rgba(196,69,54,.2);border-radius:8px;padding:1.5rem;margin:1.5rem 0}
+        .issue-card h4{color:#c44536;margin-bottom:.75rem}
+        .issue-tag{display:inline-block;font-size:.7rem;padding:.2rem .6rem;border-radius:3px;margin-right:.5rem;margin-bottom:.5rem}
+        .issue-tag.critical{background:rgba(196,69,54,.15);color:#ef5350;border:1px solid rgba(196,69,54,.3)}
+        .issue-tag.warning{background:rgba(196,154,60,.15);color:#ffd54f;border:1px solid rgba(196,154,60,.3)}
+        .engagement{font-size:.78rem;color:#605c54;margin-top:.75rem}
+        .engagement strong{color:#c49a3c}
+        @media(max-width:768px){.media-compare{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">辺野古事故検証</a>
+            <div class="nav-links">
+                <a href="index.html">トップ</a>
+                <a href="timeline.html" class="active">時系列</a>
+                <a href="archive.html">アーカイブ</a>
+                <a href="search.html">検索</a>
+                <a href="summary/index.html">AI要約</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-narrow" style="padding-top:2rem">
+        
+        <!-- TAB BAR -->
+        <div class="tab-bar">
+            <button class="tab-btn active" data-tab="timeline">📅 時系列詳細</button>
+            <button class="tab-btn" data-tab="media">📊 メディア比較分析</button>
+            <button class="tab-btn" data-tab="issues">⚠️ 沖縄2紙の問題点</button>
+        </div>
+
+        <!-- TAB 1: TIMELINE -->
+        <div id="tab-timeline" class="tab-content active">
+            <div class="section-label" style="color:#9e9a90;font-size:.7rem;letter-spacing:.25em">全イベント時系列</div>
+            
+            <div class="search-container" style="background:#12121a;border:1px solid rgba(255,255,255,.06)">
+                <input type="text" id="search-input" class="search-input" placeholder="キーワードで検索…" style="background:#0a0a0f;border-color:rgba(255,255,255,.1);color:#e8e6e1" autocomplete="off">
+                <div class="search-filters" style="margin-top:.75rem">
+                    <button class="filter-btn active" data-filter="all">すべて</button>
+                    <button class="filter-btn" data-filter="sankei">産経</button>
+                    <button class="filter-btn" data-filter="okinawa-times">沖縄T</button>
+                    <button class="filter-btn" data-filter="ryukyu-shimpo">琉球新報</button>
+                    <button class="filter-btn" data-filter="x-post">X</button>
+                    <button class="filter-btn" data-filter="note">note</button>
+                    <button class="filter-btn" data-filter="official">公的機関</button>
+                    <button class="filter-btn" data-filter="other">その他</button>
+                </div>
+            </div>
+            
+            <div id="timeline-container"><div class="loading" style="color:#605c54">読み込み中</div></div>
+        </div>
+
+        <!-- TAB 2: MEDIA COMPARISON -->
+        <div id="tab-media" class="tab-content">
+            <div class="section-label" style="color:#9e9a90;font-size:.7rem;letter-spacing:.25em">メディア比較分析</div>
+            
+            <div style="background:#12121a;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:2rem;margin-bottom:2rem">
+                <h3 style="font-family:'Shippori Mincho',serif;margin-bottom:1rem">文春オンラインの分析（2026年4月）</h3>
+                <p style="color:#9e9a90;font-size:.95rem;line-height:1.8">文春オンラインが国会図書館で1ヶ月分の紙面を調査した結果、沖縄2紙は初期段階では連日大きく報道し、検証企画も3日連続で掲載していたことが確認された。しかし、<strong style="color:#c49a3c">産経新聞との「決定的な違い」</strong>が時間の経過とともに明確になった。</p>
+            </div>
+
+            <div class="media-compare">
+                <div class="compare-col good">
+                    <h4 style="color:#4caf50">📰 産経新聞</h4>
+                    <p style="color:#9e9a90;font-size:.9rem;line-height:1.8">那覇支局の大竹直樹記者が<strong>1人で</strong>継続的に独自取材を実施。選挙ドットコムのインタビューでは取材過程も公開。</p>
+                    <ul style="color:#9e9a90;font-size:.9rem;line-height:2;margin:1rem 0 0 1.5rem">
+                        <li>生徒の118番通報内容を独自入手(4/23)</li>
+                        <li>過去10件以上の事故・法令違反を独自調査(4/23)</li>
+                        <li>名護漁協組合長の証言を独自取材</li>
+                        <li>同志社国際高校の保護者説明会を報道(3/24)</li>
+                        <li>文科省の通知を即日報道(4/7)</li>
+                        <li>玉城知事の発言を客観的に報道(4/26)</li>
+                    </ul>
+                </div>
+                <div class="compare-col neutral">
+                    <h4 style="color:#c49a3c">📰 沖縄2紙（初期）</h4>
+                    <p style="color:#9e9a90;font-size:.9rem;line-height:1.8">事故直後（3/18〜20）は両紙とも市民団体と学校の責任を厳しく追及する検証企画を掲載。</p>
+                    <ul style="color:#9e9a90;font-size:.9rem;line-height:2;margin:1rem 0 0 1.5rem">
+                        <li>琉球新報:「船使用料5000円 vs 無償」の矛盾を指摘</li>
+                        <li>沖縄タイムス:「出航基準明文化なし」を問題視</li>
+                        <li>旅行会社の安全管理不備を指摘(沖縄タイムス3/31)</li>
+                    </ul>
+                    <p style="color:#c49a3c;margin-top:1rem;font-size:.85rem">⚠️ しかし4月以降、報道姿勢に変化が見られる</p>
+                </div>
+            </div>
+            
+            <div class="media-compare">
+                <div class="compare-col bad">
+                    <h4 style="color:#c44536">📰 琉球新報（4月以降の問題）</h4>
+                    <ul style="color:#9e9a90;font-size:.9rem;line-height:2;margin:1rem 0 0 1.5rem">
+                        <li>自社イベントで反対協代表の弁明講演を実施(4/18)</li>
+                        <li>その講演内容を<strong>一切報じなかった</strong></li>
+                        <li>参加者に「情報漏洩」メールを送付</li>
+                        <li>「閉じた勉強会なのでお答えは差し控える」と回答</li>
+                        <li><strong>加害者側に弁明の場を提供しながら、報道機関としてそれを報じない二重基準</strong></li>
+                    </ul>
+                </div>
+                <div class="compare-col bad">
+                    <h4 style="color:#c44536">📰 沖縄タイムス（5月の問題）</h4>
+                    <ul style="color:#9e9a90;font-size:.9rem;line-height:2;margin:1rem 0 0 1.5rem">
+                        <li>「天国から二人の声が聞こえてくる。抗議活動を続けてほしい」という読者投稿を掲載(5/1)</li>
+                        <li>修学旅行の被害者を反対運動の犠牲者として政治利用</li>
+                        <li>批判殺到→記事削除→おわび掲載</li>
+                        <li>自社記者も「掲載はありえない」と発言</li>
+                        <li><strong>掲載判断自体の責任が問われる</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="media-compare">
+                <div class="compare-col good">
+                    <h4 style="color:#4caf50">🐦 @hirose_kiKO（きーこ）</h4>
+                    <p style="color:#9e9a90;font-size:.9rem;line-height:1.8">4月26日〜5月11日だけで<strong>20件以上の重要投稿</strong>。合計閲覧数は<strong>推定6,000万以上</strong>。証言の裏取りを行い、遺族・生徒の了承を得て一次資料を公開。</p>
+                    <ul style="color:#9e9a90;font-size:.9rem;line-height:2;margin:1rem 0 0 1.5rem">
+                        <li>117番（時報）指示の証言(4万いいね/245万閲覧)</li>
+                        <li>事故直前の音声データ(5.2万いいね/936万閲覧)</li>
+                        <li>生徒証言メール第1弾(5.8万いいね/274万閲覧)</li>
+                        <li>生徒証言メール第2弾(2.8万いいね/176万閲覧)</li>
+                        <li>教員の動画削除指示の詳細</li>
+                        <li>学校とガイド団体の人脈関係</li>
+                    </ul>
+                </div>
+                <div class="compare-col good">
+                    <h4 style="color:#4caf50">📰 週刊文春・週刊ポスト</h4>
+                    <p style="color:#9e9a90;font-size:.9rem;line-height:1.8">沖縄2紙が報じなかった問題を追及。</p>
+                    <ul style="color:#9e9a90;font-size:.9rem;line-height:2;margin:1rem 0 0 1.5rem">
+                        <li>文春:保護者説明会の音声を入手</li>
+                        <li>文春:琉球新報イベントの詳細を詳報</li>
+                        <li>文春:海保の内部文書で浦島氏発言の嘘を裏付け</li>
+                        <li>ポスト:浦島氏の弁明講演の音声を公開</li>
+                        <li>ポスト:琉球新報の「情報漏洩」メール問題を報道</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="background:#12121a;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:2rem;margin-top:2rem">
+                <p style="color:#9e9a90;font-size:.9rem;line-height:1.8"><strong style="color:#c49a3c">元毎日新聞記者・石戸諭氏のコメント:</strong></p>
+                <blockquote style="border-left:3px solid #c49a3c;padding-left:1.5rem;margin:1rem 0;font-style:italic;color:#9e9a90">「仮にこれが民間企業の起こした事故だった場合、その経営者が閉じた場で弁明発言をしていたら、報じるのが報道機関の使命です。講師として浦島氏を招いた是非も問われるべきだが、こうした発言を報じない姿勢こそが問題でしょう」</blockquote>
+            </div>
+        </div>
+
+        <!-- TAB 3: ISSUES -->
+        <div id="tab-issues" class="tab-content">
+            <div class="section-label" style="color:#9e9a90;font-size:.7rem;letter-spacing:.25em">沖縄2紙の具体的な問題点</div>
+
+            <div class="issue-card">
+                <span class="issue-tag critical">重大</span><span class="issue-tag critical">琉球新報</span>
+                <h4>自社イベントで加害者側に弁明の場を提供し、その内容を報じなかった</h4>
+                <p style="color:#9e9a90;font-size:.9rem;line-height:1.8;margin-top:.75rem">2026年4月18日、琉球新報の編集委員・論説委員が実行委員に名を連ねる「沖縄戦の記憶継承プロジェクト」において、ヘリ基地反対協議会の浦島悦子共同代表が急遽講演。「虚偽情報が山ほど流されている」「産経新聞や週刊誌を鵜呑みにしないで」と弁明。しかし琉球新報は紹介記事で<strong>浦島氏の講演どころか辺野古に行ったことすら書かなかった</strong>。</p>
+                <p style="color:#c44536;margin-top:1rem;font-size:.9rem"><strong>矛盾点:</strong> 報道機関が自社のイベントで加害者側に弁明の場を提供しながら、その内容を読者に知らせないのは「報じない」という意思決定そのものが問題。</p>
+            </div>
+
+            <div class="issue-card">
+                <span class="issue-tag critical">重大</span><span class="issue-tag critical">琉球新報</span>
+                <h4>内部告発者を「情報漏洩」として問題視するメール</h4>
+                <p style="color:#9e9a90;font-size:.9rem;line-height:1.8;margin-top:.75rem">浦島氏の講演が外部メディアに報じられた後、琉球新報社が参加者に「内部から情報が漏れた可能性があります」とメールを送付。報道機関でありながら、内部告発者を問題視する姿勢は報道倫理に反する。</p>
+                <p style="color:#c44536;margin-top:1rem;font-size:.9rem"><strong>矛盾点:</strong> 報道機関が「情報の隠蔽」を図り、情報を外に出した人を追及するのは、ジャーナリズムの原則と真逆の行動。</p>
+            </div>
+
+            <div class="issue-card">
+                <span class="issue-tag critical">重大</span><span class="issue-tag critical">沖縄タイムス</span>
+                <h4>「天国から二人の声」投稿で死者を政治利用</h4>
+                <p style="color:#9e9a90;font-size:.9rem;line-height:1.8;margin-top:.75rem">2026年5月1日（反対協謝罪と同日）、沖縄タイムスの読者投稿欄に「天国から二人の声が聞こえてくる。『誹謗中傷にめげず、抗議活動を続けてほしい』と」と記載された投稿を掲載。武石さんは抗議活動の参加者ではなく修学旅行の被害者である。</p>
+                <p style="color:#c44536;margin-top:1rem;font-size:.9rem"><strong>矛盾点:</strong> 遺族の意思を確認せずに死者の声を代弁し、反対運動の正当化に利用。沖縄タイムス自身の記者も「掲載はありえない」と発言しており、掲載判断のプロセスに深刻な問題がある。</p>
+            </div>
+
+            <div class="issue-card">
+                <span class="issue-tag warning">注意</span><span class="issue-tag warning">沖縄タイムス</span>
+                <h4>船長のスマホ紛失を報道するも、核心を避ける</h4>
+                <p style="color:#9e9a90;font-size:.9rem;line-height:1.8;margin-top:.75rem">2026年4月25日、沖縄タイムスが「平和丸の船長が海でスマホを失い通報できず」と報道。しかし、<strong>他の乗組員や引率教員がなぜ通報しなかったのか</strong>という核心的な疑問には触れていない。</p>
+                <p style="color:#c44536;margin-top:1rem;font-size:.9rem"><strong>矛盾点:</strong> 産経新聞が「船長・乗組員・引率教員が誰も通報しなかった」と報じたのに対し、沖縄タイムスは船長個人の事情のみを報道し、組織的な問題から目を逸らしている。</p>
+            </div>
+
+            <div class="issue-card">
+                <span class="issue-tag warning">注意</span><span class="issue-tag warning">両紙共通</span>
+                <h4>産経が報じた過去10件以上の事故・法令違反への後追い取材が見られない</h4>
+                <p style="color:#9e9a90;font-size:.9rem;line-height:1.8;margin-top:.75rem">2026年4月23日に産経新聞が報じた「運航団体の過去10件以上の事故・法令違反」について、沖縄2紙による独自の後追い取材や検証記事が確認できない。地元紙としてこの問題をより深く掘り下げる責任がある。</p>
+            </div>
+
+            <div class="issue-card">
+                <span class="issue-tag warning">注意</span><span class="issue-tag warning">両紙共通</span>
+                <h4>SNS上の重要証言（@hirose_kiKO）への取材・検証が見られない</h4>
+                <p style="color:#9e9a90;font-size:.9rem;line-height:1.8;margin-top:.75rem">@hirose_kiKOが公開した117番指示の証言（245万閲覧）、事故直前の音声データ（936万閲覧）、生徒証言メール（274万閲覧）などの重大情報に対する沖縄2紙の取材・検証記事が確認できない。</p>
+            </div>
+
+            <!-- まとめ -->
+            <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(196,154,60,.2);border-radius:10px;padding:2.5rem;margin-top:2rem">
+                <h3 style="font-family:'Shippori Mincho',serif;color:#c49a3c;margin-bottom:1.5rem">📊 まとめ：報道姿勢の変遷</h3>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem">
+                    <div>
+                        <p style="color:#4caf50;font-weight:bold;margin-bottom:.5rem">初期（3月）</p>
+                        <p style="color:#9e9a90;font-size:.85rem;line-height:1.6">沖縄2紙は市民団体と学校を厳しく追及。産経も独自取材を開始。報道姿勢に大きな差はなかった。</p>
+                    </div>
+                    <div>
+                        <p style="color:#c49a3c;font-weight:bold;margin-bottom:.5rem">中期（4月）</p>
+                        <p style="color:#9e9a90;font-size:.85rem;line-height:1.6">産経が独自スクープを連発。琉球新報は自社イベントで加害者側に弁明の場を提供しながらそれを報じず。</p>
+                    </div>
+                    <div>
+                        <p style="color:#c44536;font-weight:bold;margin-bottom:.5rem">現在（5月）</p>
+                        <p style="color:#9e9a90;font-size:.85rem;line-height:1.6">沖縄タイムスは死者の政治利用で批判を受け記事削除。琉球新報は情報漏洩メール問題。両紙の報道姿勢が厳しく問われている。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="site-footer" style="border-top:1px solid rgba(255,255,255,.06);padding:2rem;text-align:center">
+        <p style="font-size:.8rem;color:#605c54">辺野古ボート転覆事故 報道検証プロジェクト</p>
+        <p style="font-size:.8rem;color:#605c54">最終更新: 2026年5月12日</p>
+    </footer>
+
+    <script src="assets/js/timeline.js"></script>
+    <script>
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+        });
+    });
+
+    // Timeline filtering
+    let allEvents=[];
+    let currentFilter='all';
+
+    async function init(){
+        allEvents=await loadTimelineData();
+        renderFilteredTimeline();
+    }
+
+    function renderFilteredTimeline(){
+        const query=(document.getElementById('search-input')||{}).value||'';
+        const lq=query.toLowerCase();
+        let filtered=allEvents;
+        if(currentFilter!=='all') filtered=filtered.filter(e=>e.source===currentFilter);
+        if(lq) filtered=filtered.filter(e=>(e.title||'').toLowerCase().includes(lq)||(e.content||'').toLowerCase().includes(lq)||(e.tags||[]).join(' ').toLowerCase().includes(lq));
+        renderTimeline(filtered);
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter=btn.dataset.filter;
+            renderFilteredTimeline();
+        });
+    });
+
+    const si=document.getElementById('search-input');
+    if(si) si.addEventListener('input',renderFilteredTimeline);
+
+    init();
+    </script>
+</body>
+</html>

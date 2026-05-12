@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>検索 | 辺野古ボート転覆事故 報道検証</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <h1>辺野古ボート転覆事故 報道検証</h1>
+                <div class="subtitle">真相究明と再発防止のための情報集約サイト</div>
+            </div>
+            <nav class="nav">
+                <a href="index.html">トップ</a>
+                <a href="timeline.html">時系列詳細</a>
+                <a href="archive.html">アーカイブ</a>
+                <a href="search.html" class="active">検索</a>
+                <a href="summary/index.html">AI要約</a>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container-narrow">
+        <h2 style="margin-bottom: 1rem;">🔍 情報検索</h2>
+        <p style="margin-bottom: 2rem; color: #666;">キーワード、日付、メディアで情報を検索できます。</p>
+        
+        <!-- 検索ボックス -->
+        <div class="search-container">
+            <input 
+                type="text" 
+                id="search-input" 
+                class="search-input" 
+                placeholder="キーワードを入力（例: 118番、産経、知華、船長...）"
+                autocomplete="off"
+            >
+            
+            <div class="search-filters">
+                <button class="filter-btn active" data-filter="all">すべて</button>
+                <button class="filter-btn" data-filter="sankei">📰 産経新聞</button>
+                <button class="filter-btn" data-filter="yomiuri">📰 読売新聞</button>
+                <button class="filter-btn" data-filter="okinawa-times">📰 沖縄タイムス</button>
+                <button class="filter-btn" data-filter="x-post">🐦 X (Twitter)</button>
+                <button class="filter-btn" data-filter="youtube">🎥 YouTube</button>
+                <button class="filter-btn" data-filter="note">📝 note</button>
+                <button class="filter-btn" data-filter="official">🏛️ 公的機関</button>
+            </div>
+        </div>
+        
+        <!-- 検索結果 -->
+        <div id="search-results">
+            <div class="loading">データを読み込み中</div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>辺野古ボート転覆事故 報道検証プロジェクト</p>
+        <p class="small">最終更新: 2026年5月11日 | 自動更新: 24時間ごと</p>
+    </footer>
+    
+    <script src="assets/js/search.js"></script>
+</body>
+</html>
